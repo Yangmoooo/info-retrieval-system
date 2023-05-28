@@ -1,6 +1,6 @@
 # 信息检索 信息检索系统
 
-requirements : jieba numpy pypinyin
+requirements : jieba numpy pypinyin sympy
 
 一个简易的中文信息检索系统
 

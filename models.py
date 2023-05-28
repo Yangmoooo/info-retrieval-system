@@ -1,32 +1,27 @@
 import numpy as np
 import utils
-
+from sympy import S
 
 # 布尔模型查询
 def booleanQuery(words, docID_index, inverted_index):
     # 获取文档ID交集
-    docIDs = set()
+    docIDs = S.UniversalSet
     for word in words:
         if word in inverted_index:
             posting_list = inverted_index[word]['IDs']
-            if len(docIDs) == 0:
-                docIDs = set(posting_list)
-            else:
-                docIDs &= set(posting_list)
-    if len(docIDs) == 0:
+            docIDs &= set(posting_list)
+    if docIDs == S.UniversalSet or len(docIDs) == 0:
         return [], []
+    docIDs = [str(docID) for docID in docIDs]
     # 获取查询词项在同一文档、同一行的文档名和位置
     docNames = list()
     locations = list()
     for docID in docIDs:
-        location = set()
+        location = S.UniversalSet
         for word in words:
             if word in inverted_index:
                 pos = inverted_index[word]['IDs'][docID]
-                if len(location) == 0:
-                    location = set(pos)
-                else:
-                    location &= set(pos)
+                location &= set(pos)
         if len(location) != 0:
             docNames.append(docID_index[docID]['name'])
             locations.append(sorted(location))
